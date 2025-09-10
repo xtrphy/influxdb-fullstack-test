@@ -23,7 +23,9 @@ const getTelemetry = async (req, res) => {
             |> sort(columns: ["_time"])
             |> map(fn: (r) => ({
                 r with
-                main_power_voltage: if exists r.main_power_voltage then float(v: r.main_power_voltage) / 1000.0 else  float(v: 0.0)
+                main_power_voltage: if exists r.main_power_voltage 
+                    then float(v: r.main_power_voltage) / 1000.0 
+                    else  float(v: 0.0)
             }))
     `
 
@@ -31,7 +33,6 @@ const getTelemetry = async (req, res) => {
         const result = {
             series: {
                 speed: [],
-                fls485_level_1: [],
                 main_power_voltage: []
             },
             track: []
@@ -45,16 +46,36 @@ const getTelemetry = async (req, res) => {
                 ? parseInt(row.event_time)
                 : Math.floor(new Date(row._time).getTime() / 1000);
 
+            // скорость
             if (row.speed !== undefined) {
-                result.series.speed.push({ time, value: parseInt(row.speed) });
-            }
-            if (row.fls485_level_1 !== undefined) {
-                result.series.fls485_level_1.push({ time, value: parseInt(row.fls485_level_1) });
-            }
-            if (row.main_power_voltage !== undefined) {
-                result.series.main_power_voltage.push({ time, value: Math.round(row.main_power_voltage * 100) / 100 });
+                result.series.speed.push({
+                    time,
+                    value: parseInt(row.speed)
+                });
             }
 
+            // баки
+            Object.keys(row).forEach(key => {
+                if (key.startsWith("fls485_level")) {
+                    if (!result.series[key]) {
+                        result.series[key] = [];
+                    }
+                    result.series[key].push({
+                        time,
+                        value: parseInt(row[key])
+                    });
+                }
+            });
+
+            // напряжение
+            if (row.main_power_voltage !== undefined) {
+                result.series.main_power_voltage.push({
+                    time,
+                    value: Math.round(row.main_power_voltage * 100) / 100
+                });
+            }
+
+            // gps
             if (row.latitude && row.longitude) {
                 result.track.push({
                     time,
