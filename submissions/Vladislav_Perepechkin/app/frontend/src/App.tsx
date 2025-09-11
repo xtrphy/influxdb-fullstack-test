@@ -1,9 +1,10 @@
-
+import React from "react";
+import Telemetry from "./pages/TelemetryPage/Telemetry";
 
 const App = () => {
     return (
-        <div className='text-3xl'>
-            Home
+        <div>
+            <Telemetry />
         </div>
     );
 };
