@@ -2,7 +2,9 @@ import { MapContainer, TileLayer, Polyline, Marker } from 'react-leaflet';
 import type { TrackPoint } from '../types/types';
 
 const MapTrack = ({ track }: { track: TrackPoint[] }) => {
-    if (!track || track.length === 0) return "Данные не найдены";
+    if (!track || track.length === 0) {
+        return <div className='text-white text-3xl font-medium my-auto'>Данные не найдены :(</div>
+    };
 
     const positions: [number, number][] = track.map(p => [p.lat, p.lon]);
 
