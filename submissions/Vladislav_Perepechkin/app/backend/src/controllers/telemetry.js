@@ -1,10 +1,15 @@
 const { queryApi, bucket } = require('../db/influx');
 
 const getTelemetry = async (req, res) => {
-    const { imei, start, stop } = req.query;
+    const { imei, start, stop, range } = req.query;
 
     if (!imei || !start || !stop) {
         return res.status(400).json({ error: 'imei, start and stop is required' });
+    }
+
+    let aggregateWindowDuration = '20m';
+    if (range) {
+        aggregateWindowDuration = range;
     }
 
     const fluxQuery = `
@@ -18,7 +23,7 @@ const getTelemetry = async (req, res) => {
                             or r["_field"] == "main_power_voltage" 
                             or r["_field"] == "event_time"
                             or strings.hasPrefix(v: r["_field"], prefix: "fls485_level"))
-            |> aggregateWindow(every: 5m, fn: mean, createEmpty: false)
+            |> aggregateWindow(every: ${aggregateWindowDuration}, fn: mean, createEmpty: false)
             |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
             |> sort(columns: ["_time"])
             |> map(fn: (r) => ({
@@ -34,6 +39,7 @@ const getTelemetry = async (req, res) => {
             series: {
                 speed: [],
                 main_power_voltage: []
+                // баки разных уровней добавятся в объект позже
             },
             track: []
         };
