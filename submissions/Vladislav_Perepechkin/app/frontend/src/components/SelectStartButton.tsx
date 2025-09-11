@@ -29,8 +29,8 @@ export default function SelectStartButton({
                     <MenuItem value={'-24h'}>
                         За 1 день
                     </MenuItem>
-                    <MenuItem value={'-72h'}>
-                        За 3 дня
+                    <MenuItem value={'-48h'}>
+                        За 2 дня
                     </MenuItem>
                 </Select>
             </FormControl>

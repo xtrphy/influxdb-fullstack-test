@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import Controls from '../../components/Controls';
 import MapTrack from '../../components/MapTrack';
+import TelemetryChart from '../../components/Chart';
 import axios from 'axios';
 import type { TelemetryData, IMEI } from '../../types/types';
 import Spinner from '../../components/Spinner';
+import Footer from '../../components/Footer';
 
 const TelemetryPage = () => {
     const [availableImeis, setAvailableImeis] = useState<IMEI[]>([]);
@@ -65,7 +67,7 @@ const TelemetryPage = () => {
     }
 
     return (
-        <div className='bg-[#0b0b0b] flex flex-col items-center min-h-screen'>
+        <div className='bg-gray-700 flex flex-col items-center min-h-screen'>
             <Controls
                 availableImeis={availableImeis}
                 selectedImei={selectedImei}
@@ -73,9 +75,13 @@ const TelemetryPage = () => {
                 start={start}
                 setStart={setStart}
             />
-            {error && <p className='text-red-500'>{error}</p>}
+            
+            {error && <p className='text-red-500 mt-5 text-3xl'>{error}</p>}
 
             {telemetryData && <MapTrack track={telemetryData.track} />}
+
+            {telemetryData && <TelemetryChart series={telemetryData.series} />}
+            <Footer />
         </div>
     );
 };

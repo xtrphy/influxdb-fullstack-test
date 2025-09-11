@@ -10,7 +10,7 @@ const Controls = ({
     setStart
 }: SelectImeiButtonProps & SelectStartButtonProps) => {
     return (
-        <div className="flex justify-start gap-3 p-5 bg-white text-white w-full">
+        <div className="flex justify-start gap-3 p-5 bg-white w-full">
             <SelectImeiButton
                 availableImeis={availableImeis}
                 selectedImei={selectedImei}

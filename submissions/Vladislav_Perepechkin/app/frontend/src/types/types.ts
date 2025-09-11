@@ -19,7 +19,10 @@ export interface SeriesPoint {
 export interface TelemetrySeries {
     speed?: SeriesPoint[];
     main_power_voltage?: SeriesPoint[];
-    [key: string]: SeriesPoint[] | undefined;
+    fls485_level_1?: SeriesPoint[];
+    fls485_level_2?: SeriesPoint[];
+    fls485_level_3?: SeriesPoint[];
+    fls485_level_4?: SeriesPoint[];
 }
 
 export interface TelemetryData {

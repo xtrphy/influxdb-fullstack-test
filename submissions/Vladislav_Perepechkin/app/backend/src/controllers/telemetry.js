@@ -11,12 +11,12 @@ const getTelemetry = async (req, res) => {
 
     const hours = parseHours(start);
 
-    let aggregateWindowDuration = '1m';
+    let aggregateWindowDuration = '';
 
     if (hours >= -6) {
         aggregateWindowDuration = '30s';
     } else if (hours >= -16) {
-        aggregateWindowDuration = '5m';
+        aggregateWindowDuration = '3m';
     } else if (hours >= -24) {
         aggregateWindowDuration = '10m';
     } else {
