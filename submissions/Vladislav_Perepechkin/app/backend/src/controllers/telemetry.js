@@ -1,15 +1,26 @@
 const { queryApi, bucket } = require('../db/influx');
 
 const getTelemetry = async (req, res) => {
-    const { imei, start, stop, range } = req.query;
+    const { imei, start, stop } = req.query;
 
     if (!imei || !start || !stop) {
         return res.status(400).json({ error: 'imei, start and stop is required' });
     }
 
-    let aggregateWindowDuration = '20m';
-    if (range) {
-        aggregateWindowDuration = range;
+    const parseHours = (str) => parseInt(str.replace('h', ''), 10);
+
+    const hours = parseHours(start);
+
+    let aggregateWindowDuration = '1m';
+
+    if (hours >= -6) {
+        aggregateWindowDuration = '30s';
+    } else if (hours >= -16) {
+        aggregateWindowDuration = '5m';
+    } else if (hours >= -24) {
+        aggregateWindowDuration = '10m';
+    } else {
+        aggregateWindowDuration = '20m';
     }
 
     const fluxQuery = `

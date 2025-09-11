@@ -1,3 +1,9 @@
+export interface IMEI {
+    result: string;
+    table: number;
+    _value: string;
+}
+
 export interface TrackPoint {
     time: string;
     lat: number;
@@ -19,4 +25,15 @@ export interface TelemetrySeries {
 export interface TelemetryData {
     series: TelemetrySeries;
     track: TrackPoint[];
+}
+
+export interface SelectImeiButtonProps {
+    availableImeis: { _value: string }[];
+    selectedImei: string;
+    setSelectedImei: (imei: string) => void;
+}
+
+export interface SelectStartButtonProps {
+    setStart: (time: string) => void;
+    start: string;
 }
