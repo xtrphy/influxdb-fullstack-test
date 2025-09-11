@@ -1,11 +1,8 @@
-import React from "react";
-import Telemetry from "./pages/TelemetryPage/Telemetry";
+import TelemetryPage from "./pages/TelemetryPage/TelemetryPage";
 
 const App = () => {
     return (
-        <div>
-            <Telemetry />
-        </div>
+        <TelemetryPage />
     );
 };
 
